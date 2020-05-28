@@ -33,3 +33,9 @@ print(len(variable_name))
 for i in range(len(variable_name)):
     title = variable_name[i]
     print(title['title'])
+=======
+data, meta_data = ts.get_daily(symbol='JNUG')
+print(data)
+data['4. close'].plot()
+plt.title('JNUG')
+plt.show()
