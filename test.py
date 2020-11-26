@@ -1,21 +1,23 @@
 #test.py
-from yahoo_finance import Share
+
 from alpha_vantage.timeseries import TimeSeries
 from newsapi import NewsApiClient
 from pytrends.request import TrendReq
 
 import matplotlib.pyplot as plt
-from IPython.display import display
+
 
 """
 google trends data
 """
 pytrends = TrendReq(hl='en-US', tz=360)
 kw_list = ["walmart stock"]
-pytrends.build_payload(kw_list, cat=0, timeframe='today 5-y', geo='GLOBAL', gprop='')
+pytrends.build_payload(kw_list, cat=0, timeframe='today 5-y', geo='US', gprop='')
 
 interest_over_time_df = pytrends.interest_over_time()
 print(interest_over_time_df)
+interest_over_time_df['walmart stock'].plot()
+# interest_over_time_df.legend('walmart stock google trends')
 
 """
 price data
@@ -24,6 +26,7 @@ ts = TimeSeries(key='G9V53KVNRI8KMSXH', output_format='pandas')
 wmt_price, meta_data = ts.get_daily(symbol='WMT', outputsize='full') #get all historic prices
 print(wmt_price)
 wmt_price['4. close'].plot()
+#wmt_price['4. close'].legend('walmart stock price')
 plt.title('Walmart ')
 
 
@@ -33,8 +36,8 @@ news data
 newsapi = NewsApiClient(api_key='ff0f41a5f9804ed69aa4e250e0ae9177')
 news_data = newsapi.get_everything(q='walmart',
                                     sources='bloomberg, cnn, nbc-news, the-washington-post, the-wall-street-journal, politico',
-                                    from_param='2020-05-01',
-                                    to='2020-05-27',
+                                    from_param='2020-11-13',
+                                    to='2020-11-20',
                                     language='en',
                                     page_size=100)
 
