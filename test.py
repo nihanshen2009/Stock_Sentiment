@@ -1,10 +1,20 @@
-#test.py
+"""
+The original Big Time Billionaires Tester Program
+
+The purpose of this program is to test out api's
+
+@author: Hanshen Ni
+
+"""
+import datetime
+
+import matplotlib.pyplot as plt
 
 from alpha_vantage.timeseries import TimeSeries
 from newsapi import NewsApiClient
 from pytrends.request import TrendReq
 
-import matplotlib.pyplot as plt
+
 
 
 """
@@ -16,8 +26,7 @@ pytrends.build_payload(kw_list, cat=0, timeframe='today 5-y', geo='US', gprop=''
 
 interest_over_time_df = pytrends.interest_over_time()
 print(interest_over_time_df)
-interest_over_time_df['walmart stock'].plot()
-# interest_over_time_df.legend('walmart stock google trends')
+# int_plot = interest_over_time_df['walmart stock'].plot(label="Google Interest")
 
 """
 price data
@@ -25,9 +34,9 @@ price data
 ts = TimeSeries(key='G9V53KVNRI8KMSXH', output_format='pandas')
 wmt_price, meta_data = ts.get_daily(symbol='WMT', outputsize='full') #get all historic prices
 print(wmt_price)
-wmt_price['4. close'].plot()
-#wmt_price['4. close'].legend('walmart stock price')
-plt.title('Walmart ')
+# price_plot = wmt_price['4. close'].plot(label="Price")
+
+
 
 
 """
@@ -41,27 +50,38 @@ news_data = newsapi.get_everything(q='walmart',
                                     language='en',
                                     page_size=100)
 
+variable_name = news_data['articles']
+
 #get sources
 #print(newsapi.get_sources())
-
 #print(news_data.keys())
 #print(news_data.items())
 #print(news_data['totalResults'])
-
-
-variable_name = news_data['articles']
 #print(len(variable_name))
 # for i in range(news_data['totalResults']):
 #print(variable_name[0])
 
+"""
 for i in range(len(variable_name)):
     title = variable_name[i]
     print(title['title'])
+"""
 
+"""
+plotting
+"""
+fig, ax = plt.subplots()
+
+ax.plot(wmt_price['4. close'], label='Price', color='r')
+ax.set_xlabel('Dates')
+ax.set_ylabel('Price')
+ax.set_xlim([datetime.datetime(2019,12,1), datetime.datetime(2020,12,1)])
+
+ax2 = ax.twinx()
+ax2.plot(interest_over_time_df['walmart stock'], label='Google Interest', color='b')
+ax2.set_ylabel('Interest')
+ax2.set_ylim([0,100])
+
+plt.title('Walmart Stock Analysis')
 
 plt.show()
-#data, meta_data = ts.get_daily(symbol='JNUG')
-#print(data)
-#data['4. close'].plot()
-#plt.title('JNUG')
-#plt.show()
